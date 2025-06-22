@@ -21,7 +21,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5174'], // <-- replace * with exact origin
+    'allowed_origins' => ['http://e-commerce-web.test:5173'], // <-- replace * with exact origin
 
     'allowed_origins_patterns' => [],
 

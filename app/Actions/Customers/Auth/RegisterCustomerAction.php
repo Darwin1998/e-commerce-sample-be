@@ -14,8 +14,13 @@ class RegisterCustomerAction
     {
         $data = $request->validated();
 
-        $customer = Customer::create($data);
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('customers', 's3');
+            $data['image'] = $path;
+        }
+        $data['password'] = bcrypt($data['password']);
+        Customer::create($data);
 
-        return response()->json($customer);
+        return response()->json(['message' => 'Registration Success!'], 201);
     }
 }
