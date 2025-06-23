@@ -25,6 +25,7 @@ class ProfileResource extends JsonResource
             'email' => $this->resource->email,
             'phone_number' => $this->resource->phone_number,
             'profile_picture' => Storage::temporaryUrl($this->resource->image, now()->addMinutes(30)),
+            'addresses' => AddressResource::collection($this->resource->addresses),
         ];
     }
 }
