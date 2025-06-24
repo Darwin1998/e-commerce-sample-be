@@ -2,7 +2,7 @@
 
 # Run Laravel setup
 php artisan config:cache
-php artisan migrate --force
+php artisan migrate:fresh --force
 php artisan db:seed --force
 
 # Start Apache
