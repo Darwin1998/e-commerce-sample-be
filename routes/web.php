@@ -18,3 +18,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/db-check', function () {
+    return [
+        'connection' => config('database.default'),
+        'database' => DB::connection()->getDatabaseName(),
+        'tables' => DB::select('SHOW TABLES'),
+    ];
+});
+
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
