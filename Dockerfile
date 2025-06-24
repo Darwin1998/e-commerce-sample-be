@@ -1,10 +1,10 @@
-# Use the official PHP image with Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# Install system dependencies
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpq-dev libonig-dev libzip-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip xml
+    git curl zip unzip libpq-dev libonig-dev libzip-dev libxml2-dev libicu-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip xml intl
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
