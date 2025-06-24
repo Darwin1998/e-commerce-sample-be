@@ -36,10 +36,18 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
 
 # Run migrations and seeders (temporary line!)
-RUN php artisan migrate --force && php artisan db:seed --force
+# Set correct permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Set Apache to serve from public/
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
 
 # Optional: set ServerName to remove warning
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Expose port
+# Add start script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
+
 EXPOSE 80
