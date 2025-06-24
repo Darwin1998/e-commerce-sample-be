@@ -29,5 +29,17 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 # Set Apache to serve from public/
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
 
+# Set correct permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Set Apache to serve from public/
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Run migrations and seeders (temporary line!)
+RUN php artisan migrate --force && php artisan db:seed --force
+
+# Optional: set ServerName to remove warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Expose port
 EXPOSE 80
