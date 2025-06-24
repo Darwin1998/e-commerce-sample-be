@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\ValidationException;
 
@@ -30,5 +31,7 @@ class AppServiceProvider extends ServiceProvider
                 ->danger()
                 ->send();
         };
+
+        Schema::defaultStringLength(191);
     }
 }
