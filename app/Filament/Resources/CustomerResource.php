@@ -69,7 +69,7 @@ class CustomerResource extends Resource
             ->columns([
                 ImageColumn::make('image') // Product Image
                     ->label('Image')
-                    ->disk('s3')
+                    ->disk(config('filesystems.default'))
                     ->height(50)
                     ->width(50)
                     ->defaultImageUrl(asset('images/default-user.jpg'))
