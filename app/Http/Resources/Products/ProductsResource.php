@@ -18,14 +18,16 @@ class ProductsResource extends JsonResource
     public function toArray(Request $request): array
     {
         parent::toArray($request);
-
+        $disk = config('filesystems.default');
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'description' => $this->resource->description,
             'price' => $this->resource->price,
             'stock' => $this->resource->stock,
-            'image' => Storage::temporaryUrl($this->resource->image, now()->addMinutes(30)),
+            'image' => $disk === 's3'
+                ?  Storage::temporaryUrl($this->resource->image, now()->addMinutes(30))
+                : Storage::url($this->resource->image),
             'view_link' => route('products.show', $this->resource->id),
         ];
     }
