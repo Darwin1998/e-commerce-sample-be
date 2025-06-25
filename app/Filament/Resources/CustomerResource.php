@@ -55,7 +55,7 @@ class CustomerResource extends Resource
                         ->required(),
                     FileUpload::make('image')->image()
                         ->directory('customers')
-                        ->disk('s3')
+                        ->disk(config('filesystems.default'))
                         ->maxSize(5 * 1024)
                         ->preserveFilenames(),
                 ]),
