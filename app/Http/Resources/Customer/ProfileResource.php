@@ -18,13 +18,15 @@ class ProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         parent::toArray($request);
-
+        $disk = config('filesystems.default');
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'email' => $this->resource->email,
             'phone_number' => $this->resource->phone_number,
-            'profile_picture' => Storage::temporaryUrl($this->resource->image, now()->addMinutes(30)),
+            'profile_picture' => $disk === 's3'
+                ? Storage::temporaryUrl($this->resource->image, now()->addMinutes(30))
+                : Storage::url($this->resource->image),
             'addresses' => AddressResource::collection($this->resource->addresses),
         ];
     }
