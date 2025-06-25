@@ -33,6 +33,8 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 # Point Apache to the Laravel public folder
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
 
+RUN echo "User www-data" >> /etc/apache2/apache2.conf
+
 # Copy and allow execution of start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh

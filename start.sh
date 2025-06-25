@@ -1,8 +1,13 @@
 #!/bin/bash
 
-echo "🚀 Fixing permissions..."
+echo "🚀 Ensuring necessary directories exist..."
+mkdir -p /var/www/storage/logs
+mkdir -p /var/www/storage/framework/cache
+
+echo "🔐 Fixing permissions for storage and cache..."
+find /var/www/storage -type d -exec chmod 775 {} \;
+find /var/www/storage -type f -exec chmod 664 {} \;
 chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 echo "🔗 Linking storage..."
 php artisan storage:link || true
