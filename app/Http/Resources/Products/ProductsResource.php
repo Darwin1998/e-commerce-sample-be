@@ -26,8 +26,12 @@ class ProductsResource extends JsonResource
             'price' => $this->resource->price,
             'stock' => $this->resource->stock,
             'image' => $disk === 's3'
-                ?  Storage::temporaryUrl($this->resource->image, now()->addMinutes(30))
-                : Storage::url($this->resource->image),
+                ? ($this->resource->image
+                    ? Storage::temporaryUrl($this->resource->image, now()->addMinutes(30))
+                    : asset('images/default.png'))
+                : ($this->resource->image
+                    ? Storage::url($this->resource->image)
+                    : asset('images/default.png')),
             'view_link' => route('products.show', $this->resource->id),
         ];
     }
