@@ -139,7 +139,9 @@ class CustomerResource extends Resource
                         TextEntry::make('name'),
                         TextEntry::make('email'),
                         TextEntry::make('phone_number'),
-                        ImageEntry::make('image')->circular()->disk('s3'),
+                        ImageEntry::make('image')
+                            ->circular()
+                            ->disk(config('filesystems.default')),
                     ]),
             ]);
     }
