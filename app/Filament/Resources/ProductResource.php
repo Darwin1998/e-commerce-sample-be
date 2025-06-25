@@ -164,7 +164,8 @@ class ProductResource extends Resource
                         TextEntry::make('stock'),
                         ImageEntry::make('image')
                             ->circular()
-                            ->disk(config('filesystems.default'))                    ]),
+                            ->disk(config('filesystems.default'))
+                    ]),
             ]);
     }
 }
