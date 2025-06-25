@@ -22,7 +22,6 @@ class UpdateCustomerProfileAction
             $path = $request->file('profile_picture')->store('customers/'.$customer->id);
         }
 
-
         $customer->update([
             'name' => $data['name'],
             'phone_number' => $data['phone_number'],
@@ -34,6 +33,7 @@ class UpdateCustomerProfileAction
                 'image' => $path,
             ]);
         }
+
         return response()->json([
             'message' => 'Profile updated successfully.',
         ]);

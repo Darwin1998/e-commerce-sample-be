@@ -19,6 +19,7 @@ class ProductsResource extends JsonResource
     {
         parent::toArray($request);
         $disk = config('filesystems.default');
+
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
