@@ -59,7 +59,7 @@ class ProductResource extends Resource
                     ->required(),
                 FileUpload::make('image')->image()
                     ->directory('products')
-                    ->disk('s3')
+                    ->disk(config('filesystems.default'))
                     ->maxSize(5 * 1024)
                     ->preserveFilenames(),
             ])->columns(2),
@@ -72,7 +72,7 @@ class ProductResource extends Resource
             ->columns([
                 ImageColumn::make('image') // Product Image
                     ->label('Image')
-                    ->disk('s3')
+                    ->disk(config('filesystems.default'))
                     ->height(50)
                     ->width(50)
                     ->defaultImageUrl(asset('images/default.png'))
@@ -162,8 +162,9 @@ class ProductResource extends Resource
                         TextEntry::make('name'),
                         TextEntry::make('description'),
                         TextEntry::make('stock'),
-                        ImageEntry::make('image')->circular()->disk('s3'),
-                    ]),
+                        ImageEntry::make('image')
+                            ->circular()
+                            ->disk(config('filesystems.default'))                    ]),
             ]);
     }
 }
