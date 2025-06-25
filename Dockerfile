@@ -1,45 +1,45 @@
-FROM php:8.2-apache
+# Use PHP with Apache
+FROM php:8.1-apache
 
-# Install system and PHP dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    libonig-dev libzip-dev zip unzip libxml2-dev libpq-dev libicu-dev git curl \
-    nodejs npm \
+    libzip-dev zip unzip libonig-dev libxml2-dev libpq-dev libicu-dev \
+    git curl libpng-dev nodejs npm \
     && docker-php-ext-install pdo pdo_mysql mbstring zip xml intl
 
-# Enable Apache mod_rewrite
+# Enable Apache rewrite module
 RUN a2enmod rewrite
 
-# Set ServerName to avoid warnings
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Fix Apache DocumentRoot to point to Laravel's public folder
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Set working directory to Laravel root
+# Set working directory
 WORKDIR /var/www
 
-# Copy application files
-COPY . .
-
-# Copy Composer from official image
+# Copy composer from composer image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy app source
+COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Install Node dependencies and build frontend assets (Vite)
-RUN npm install && npm run build
+# Install Node and build assets
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install && \
+    npm run build
 
-# Set correct permissions for Laravel
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Fix permissions after build
+RUN chown -R www-data:www-data /var/www
 
-# Point Apache to the Laravel public folder
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|g' /etc/apache2/sites-available/000-default.conf
-
-RUN echo "User www-data" >> /etc/apache2/apache2.conf
-
-# Copy and allow execution of start script
+# Add and run startup script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Set entrypoint
-CMD ["/start.sh"]
-
+# Expose port
 EXPOSE 80
+
+# Start the server
+CMD ["/start.sh"]
